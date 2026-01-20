@@ -31,3 +31,7 @@ class eliminar_producto(DeleteView):
     success_url = reverse_lazy('ver_producto')
     template_name = 'core/eliminar_producto.html'
     context_object_name = 'producto'
+
+def ver_productos_tienda(request):
+    productos = Producto.objects.all()
+    return render(request, 'core/ver_productos_tienda.html', {'productos':productos})

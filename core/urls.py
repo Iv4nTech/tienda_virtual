@@ -6,7 +6,7 @@ urlpatterns = [
     path('tienda/admin/productos/<int:pk>', detalle_producto.as_view(), name='detalle_producto'),
     path('tienda/admin/productos/nuevo', crear_producto.as_view(), name='crear_producto'),
     path('tienda/admin/productos/edicion/<int:pk>', editar_producto.as_view(), name='editar_producto'),
-    path('tienda/admin/productos/eliminar/<int:pk>', eliminar_producto.as_view(), name='eliminar_producto')
+    path('tienda/admin/productos/eliminar/<int:pk>', eliminar_producto.as_view(), name='eliminar_producto'),
 
-
+    path('tienda/', ver_productos_tienda, name='ver_producto_tienda')
 ]
