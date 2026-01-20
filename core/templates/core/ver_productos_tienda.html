@@ -5,6 +5,31 @@
 {% block tittle_section %}Ver productos{% endblock %}
 
 {% block content %}
+<form action="" method="get">
+    <div>
+        <label for="name-product">Nombre producto:</label>
+        <input name="name-product" type="text">
+    </div>
+    <div>
+        <label for="brand">Marca</label>
+        <select name="brand" id="brand">
+            <option value="">Seleciona una marca</option>
+            {% for brand in brands %}
+            <option value="{{brand}}">{{brand}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="vip">VIP</label>
+        <input name="vip" type="checkbox">
+    </div>
+    <div>
+        <label for="price">Precio</label>
+        <input type="range" min="0" max="9999" step="100" name="price" id="price">
+    </div>
+    <button type="submit">Buscar</button>
+    <a href="{% url 'ver_producto_tienda' %}">Eliminar filtros</a>
+</form>
 <ul>
 {% for producto in productos %}
     <li>{{producto.nombre}} - {{producto.modelo}}</li>
