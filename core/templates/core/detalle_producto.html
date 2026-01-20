@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Detalle del producto {{producto.nombre}}({{producto.id}}) | Admin{% endblock %}
+
+{% block tittle_section %}Detalle del producto {{producto.nombre}}({{producto.id}}){% endblock %}
+
+{% block content %}
+<p>Nombre del producto: {{producto.nombre}}</p>
+<p>Modelo: {{producto.modelo}}</p>
+<p>Unidades: {{producto.unidades}}</p>
+<p>Precio: {{producto.precio}}</p>
+<p>VIP: {{producto.vip}}</p>
+{% endblock %}

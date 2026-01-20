@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Ver productos | Admin{% endblock %}
+
+{% block tittle_section %}Ver productos{% endblock %}
+
+{% block content %}
+<ul>
+{% for producto in productos %}
+    <li><a href="{% url 'detalle_producto' producto.pk %}">{{producto.nombre}}{{producto.id}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
