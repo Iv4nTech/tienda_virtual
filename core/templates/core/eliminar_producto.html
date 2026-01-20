@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Eliminar producto {{producto.nombre}}({{producto.id}}) | Admin{% endblock %}
+
+{% block tittle_section %}Eliminar producto {{producto.nombre}}({{producto.id}}){% endblock %}
+
+{% block content %}
+
+<div>Seguro que quieres eliminar el producto ({{producto.id}}) {{producto.nombre}}
+<form action="" method="POST">
+    {% csrf_token %}
+    <button type="submit">Eliminar</button>
+</form>
+</div>
+{% endblock %}
