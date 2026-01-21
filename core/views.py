@@ -5,37 +5,56 @@ from .forms import ProductoForm, CompraForm, ClienteCreationForm
 from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import UserCreationForm
 
-class ver_productos(ListView):
+def user_admin_or_staff(user):
+    return user.is_superuser or user.is_staff
+
+
+class ver_productos(UserPassesTestMixin,ListView):
     template_name = 'core/ver_productos.html'
     context_object_name = 'productos'
     model = Producto
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
     
-class detalle_producto(DetailView):
+class detalle_producto(UserPassesTestMixin,DetailView):
     model = Producto
     context_object_name = 'producto'
     template_name = 'core/detalle_producto.html'
 
-class crear_producto(CreateView):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+
+class crear_producto(UserPassesTestMixin,CreateView):
     model = Producto
     form_class = ProductoForm
     success_url = reverse_lazy('ver_producto')
     template_name = 'core/crear_producto.html'
 
-class editar_producto(UpdateView):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+
+class editar_producto(UserPassesTestMixin,UpdateView):
     model = Producto
     form_class = ProductoForm
     success_url = reverse_lazy('ver_producto')
     template_name = 'core/crear_producto.html'
 
-class eliminar_producto(DeleteView):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+
+class eliminar_producto(UserPassesTestMixin,DeleteView):
     model = Producto
     success_url = reverse_lazy('ver_producto')
     template_name = 'core/eliminar_producto.html'
     context_object_name = 'producto'
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
 class ver_productos_tienda(ListView):
     model = Producto
@@ -79,9 +98,6 @@ def checkout(request, pk):
             print('formulario invalido')
     form = CompraForm()
     return render(request, 'core/checkout.html', {'form':form, 'producto':producto})
-
-def user_admin_or_staff(user):
-    return user.is_superuser or user.is_staff
 
 @user_passes_test(user_admin_or_staff)
 def informes(request):
