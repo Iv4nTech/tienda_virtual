@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import *
-from .forms import ProductoForm, CompraForm
+from .forms import ProductoForm, CompraForm, ClienteCreationForm
 from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.forms import UserCreationForm
 
 class ver_productos(ListView):
     template_name = 'core/ver_productos.html'
@@ -91,3 +92,8 @@ def informes(request):
     clientes_importe = UsuarioTienda.objects.annotate(importe_total_compras=Sum('compras__importe'))
     print(clientes_importe.values())
     return render(request, 'core/informes.html', {'productos':productos, 'marcas':marcas, 'marcafiltrada':marca_filtrada})
+
+class RegistroView(CreateView):
+    form_class = ClienteCreationForm
+    template_name = 'registration/register.html'
+    success_url = reverse_lazy('login')

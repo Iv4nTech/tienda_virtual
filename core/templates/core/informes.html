@@ -23,7 +23,9 @@
 </form>
 
     <div>
+        {% if marcafiltrada is not none %}
          <h2>{{marcafiltrada}}</h2>
+         {% endif %}
          <ul>
               {% for producto in marcafiltrada.productos.all %}
            <li>{{producto.nombre}}</li>
