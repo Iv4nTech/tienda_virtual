@@ -1,63 +1,123 @@
 {% extends 'core/base.html' %}
 
-{% block tittle_bar %}Informe de la tienda{% endblock %}
+{% block tittle_bar %}Panel de Informes | Admin{% endblock %}
 
-{% block tittle_section %}Informe de la tienda{% endblock %}
+{% block tittle_section %}Dashboard de Informes{% endblock %}
 
 {% block content %}
+<div class="row g-4">
+    
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0 fw-bold text-primary">Unidades Vendidas por Producto</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-4">Producto</th>
+                            <th scope="col" class="text-end pe-4">Total Unidades</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                        <tr>
+                            <td class="ps-4 fw-medium">{{producto.nombre}}</td>
+                            <td class="text-end pe-4">
+                                <span class="badge rounded-pill bg-info text-dark">
+                                    {{producto.compras__unidades__sum}}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-{% for producto in productos %}
-    <div>
-         {{producto.nombre}} - {{producto.compras__unidades__sum}} unidades vendidas
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Consultar Catálogo por Marca</h5>
+                <form action="" method="get" class="row g-2">
+                    <div class="col-md-9">
+                        <select name="marcas" id="marcas" class="form-select" aria-label="Seleccionar marca">
+                            <option value="Ninguna">Selecciona una marca</option>
+                            {% for marca in marcas %}
+                            <option value="{{marca.nombre}}">{{marca.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary w-100">Filtrar Marca</button>
+                    </div>
+                </form>
+
+                {% if marcafiltrada is not none %}
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="text-uppercase text-muted small fw-bold mb-3">Productos de {{marcafiltrada}}:</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for producto in marcafiltrada.productos.all %}
+                        <span class="badge bg-light text-dark border p-2">{{producto.nombre}}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0 fw-bold">Registro de Compras</h5>
+            </div>
+            <div class="list-group list-group-flush overflow-auto" style="max-height: 400px;">
+                {% for compra in compras %}
+                {% if compra.usuario is not none %}
+                <a href="{% url 'detalle_compra' compra.pk %}" class="list-group-item list-group-item-action p-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 fw-bold text-dark">Compra #{{compra.pk}}</h6>
+                        <small class="text-primary text-decoration-underline">Ver detalle</small>
+                    </div>
+                    <p class="mb-1 text-muted small">{{compra}}</p>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
-{% endfor %}
 
-<form action="" method="get">
-    <select name="marcas" id="marcas">
-        <option value="Ninguna">Seleciona una marca</option> 
-       {% for marca in marcas %}
-        <option value="{{marca.nombre}}">{{marca.nombre}}</option>
-       {% endfor %}
-    </select>
-    <button type="submit">Filtrar</button>
-</form>
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 mb-4 bg-dark text-white">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Buscar Cliente para ver compras</h5>
+                <form action="" method="get">
+                    <div class="mb-3">
+                        <label for="username" class="form-label small opacity-75">Nombre de usuario:</label>
+                        <input name="username" id="username" type="text" class="form-control form-control-sm bg-light" placeholder="Ej: ivan_gomez">
+                    </div>
+                    <button type="submit" class="btn btn-outline-light btn-sm w-100">Filtrar Usuario</button>
+                </form>
+            </div>
+        </div>
 
-<h2>Buscar cliente por username</h2>
-<form action="" method="get">
-    <label for="username">Username:</label>
-    <input name="username" type="text">
-     <button type="submit">Filtrar</button>
-</form>
+        <div class="card shadow-sm border-0 border-top border-warning border-4">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <span class="fs-4 me-2">🏆</span>
+                    <h5 class="fw-bold mb-0">Top 10 Usuarios</h5>
+                </div>
+                <ol class="list-group list-group-numbered list-group-flush">
+                {% for top in topdiez %}
+                    <li class="list-group-item d-flex justify-content-between align-items-start border-0 px-0">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold text-dark">{{top.username}}</div>
+                        </div>
+                    </li>
+                {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <ul>
-    {% for compra in compras %}
-    {% if compra.usuario is not none %}
-    <li><a href="{% url 'detalle_compra' compra.pk %}">{{compra}}</a></li>
-    {% endif %}
-    {% endfor %}
-    </ul>
 </div>
-
-    <div>
-        {% if marcafiltrada is not none %}
-         <h2>{{marcafiltrada}}</h2>
-         {% endif %}
-         <ul>
-              {% for producto in marcafiltrada.productos.all %}
-           <li>{{producto.nombre}}</li>
-         {% endfor %}
-         </ul>
-    </div>
-
-    <h2>Top 10 usuarios de la masoneria</h2>
-    <ul>
-    {% for top in topdiez %}
-        <li>{{top.username}}</li>
-    {% endfor %}
-    </ul>
-
-
-
-
 {% endblock %}

@@ -1,38 +1,95 @@
 {% extends 'core/base.html' %}
 
-{% block tittle_bar %}Ver productos{% endblock %}
+{% block tittle_bar %}Tienda | Catálogo de Productos{% endblock %}
 
-{% block tittle_section %}Ver productos{% endblock %}
+{% block tittle_section %}Explora nuestros productos{% endblock %}
 
 {% block content %}
-<form action="" method="get">
-    <div>
-        <label for="name-product">Nombre producto:</label>
-        <input name="name-product" type="text">
+<section class="card shadow-sm border-0 mb-5">
+    <div class="card-body p-4">
+        <form action="" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="name-product" class="form-label fw-bold">Nombre del producto</label>
+                    <input name="name-product" id="name-product" type="text" class="form-control" placeholder="Ej: Smartphone...">
+            </div>
+
+            <div class="col-md-3">
+                <label for="brand" class="form-label fw-bold">Marca</label>
+                <select name="brand" id="brand" class="form-select">
+                    <option value="">Todas las marcas</option>
+                    {% for brand in brands %}
+                    <option value="{{brand}}">{{brand}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="price" class="form-label fw-bold">Precio Máximo</label>
+                <input type="range" class="form-range" min="0" max="9999" step="100" name="price" id="price" oninput="this.nextElementSibling.value = this.value + '€'">
+                <output class="badge bg-secondary">5000€</output>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-check form-switch mb-2">
+                    <input name="vip" class="form-check-input" type="checkbox" role="switch" id="vip">
+                    <label class="form-check-label fw-bold" for="vip">Solo VIP</label>
+                </div>
+            </div>
+
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary px-4">
+                    Filtrar Resultados
+                </button>
+                <a href="{% url 'ver_producto_tienda' %}" class="btn btn-outline-secondary">
+                    Limpiar Filtros
+                </a>
+            </div>
+        </form>
     </div>
-    <div>
-        <label for="brand">Marca</label>
-        <select name="brand" id="brand">
-            <option value="">Seleciona una marca</option>
-            {% for brand in brands %}
-            <option value="{{brand}}">{{brand}}</option>
-            {% endfor %}
-        </select>
+</section>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for producto in productos %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm hover-shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0 fw-bold">{{ producto.nombre }}</h5>
+                    {% if producto.vip %}
+                    <span class="badge bg-warning text-dark">VIP</span>
+                    {% endif %}
+                </div>
+                <p class="text-muted small mb-3">Modelo: {{ producto.modelo }}</p>
+                <div class="d-flex justify-content-between align-items-center mt-auto">
+                    <span class="h5 mb-0 text-primary fw-bold">{{ producto.precio }}€</span>
+                    <a href="{% url 'checkout' producto.pk %}" class="btn btn-outline-primary btn-sm px-3">
+                        Ver Detalles
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label for="vip">VIP</label>
-        <input name="vip" type="checkbox">
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center py-5">
+            <p class="mb-0">No se encontraron productos con esos criterios.</p>
+        </div>
     </div>
-    <div>
-        <label for="price">Precio</label>
-        <input type="range" min="0" max="9999" step="100" name="price" id="price">
-    </div>
-    <button type="submit">Buscar</button>
-    <a href="{% url 'ver_producto_tienda' %}">Eliminar filtros</a>
-</form>
-<ul>
-{% for producto in productos %}
-    <li><a href="{% url 'checkout' producto.pk %}">{{producto.nombre}} - {{producto.modelo}}</a></li>
-{% endfor %}
-</ul>
+    {% endfor %}
+</div>
+
+<style>
+
+    .hover-shadow {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+
+    .form-range::-webkit-slider-thumb {
+        background: #0d6efd;
+    }
+</style>
 {% endblock %}

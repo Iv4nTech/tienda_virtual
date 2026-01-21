@@ -1,13 +1,16 @@
 {% extends 'core/base.html' %}
 
-{% block tittle_bar %}Crear producto) | Admin{% endblock %}
+{% block tittle_bar %}{% if form.instance.pk %}Editar producto{% else %}Crear producto{% endif %} | Admin{% endblock %}
 
-{% block tittle_section %}Creacion de un producto{% endblock %}
+{% block tittle_section %}{% if form.instance.pk %}Editar producto{% else %}Crear producto{% endif %}{% endblock %}
 
 {% block content %}
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+<div class="card p-4 shadow-sm">
+    <form action="" method="POST" class="needs-validation">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.as_p }} </div>
+        <button type="submit" class="btn btn-success px-4">Guardar Producto</button>
+    </form>
+</div>
 {% endblock %}

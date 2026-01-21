@@ -3,28 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block tittle_bar %}{% endblock %}</title>
+    <title>{% block tittle_bar %}{% endblock %} | Tienda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bs-body-font-family: 'Inter', sans-serif;
+            --primary-color: #2563eb;
+        }
+        body { background-color: #f8fafc; color: #1e293b; }
+        .navbar { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); }
+        .main-container { min-height: calc(100vh - 160px); padding-top: 2rem; padding-bottom: 4rem; }
+        .card { border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-radius: 12px; }
+        .btn-primary { background-color: var(--primary-color); border: none; }
+        .footer { background: #fff; border-top: 1px solid #e2e8f0; padding: 2rem 0; margin-top: auto; }
+        /* Accesibilidad: Foco claro */
+        a:focus, button:focus { outline: 3px solid #93c5fd; outline-offset: 2px; }
+    </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'ver_producto' %}">Inicio</a></li>
-            <li><a href="{% url 'ver_producto_tienda' %}">Tienda usuario</a></li>
-        </ul>
-        {% if user.is_authenticated %}
-        <p>Bienvenido {{user.username}}!</p>
-          <form action="{% url 'logout' %}" method="post">
-  {% csrf_token %} 
-  <button type="submit" class="">Cerrar Sesión</button>
-</form>
-        {% else %}
-        <a href="{% url 'login' %}">Iniciar sesion</a>
-        {% endif %}
-      
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'ver_producto' %}">Tienda</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'ver_producto' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'ver_producto_tienda' %}">Tienda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'informes' %}">Informe</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text me-3 text-white">Hola, <strong>{{user.username}}</strong></span>
+                        <form action="{% url 'logout' %}" method="post" class="m-0">
+                            {% csrf_token %} 
+                            <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Iniciar sesión</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </nav>
-    <h1>{% block tittle_section %}{% endblock %}</h1>
-    {% block content %}{% endblock %}
+
+    <main class="container main-container">
+        <header class="mb-4">
+            <h1 class="display-5 fw-bold text-dark">{% block tittle_section %}{% endblock %}</h1>
+            <hr class="text-secondary opacity-25">
+        </header>
+
+        {% block content %}{% endblock %}
+    </main>
     
-    <footer>&copy; Iván Gómez</footer>
+    <footer class="footer">
+        <div class="container text-center text-muted">
+            <p class="mb-0">&copy; 2026 Iván Gómez</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
