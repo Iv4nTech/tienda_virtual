@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Detalle de la compra {{compra.id}}({{producto.usuario}}){% endblock %}
+
+{% block tittle_section %}Detalle de la compra {{compra.id}}(Usuario: {{compra.usuario}}){% endblock %}
+
+{% block content %}
+<p>Usuario: {{compra.usuario}}</p>
+<p>Importe: {{compra.importe}}</p>
+<p>Unidades: {{compra.unidades}}</p>
+<p>IVA: {{compra.iva}}</p>
+<p>Precio: {{compra.producto.precio}}€</p>
+<p>Nombre del producto comprado: {{compra.producto.nombre}}</p>
+{% endblock %}
