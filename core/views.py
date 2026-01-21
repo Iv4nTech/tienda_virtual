@@ -32,6 +32,30 @@ class eliminar_producto(DeleteView):
     template_name = 'core/eliminar_producto.html'
     context_object_name = 'producto'
 
-def ver_productos_tienda(request):
-    productos = Producto.objects.all()
-    return render(request, 'core/ver_productos_tienda.html', {'productos':productos})
+class ver_productos_tienda(ListView):
+    model = Producto
+    context_object_name = 'productos'
+    template_name = 'core/ver_productos_tienda.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['brands'] = Marca.objects.all()
+        return context
+    
+    def get_queryset(self):
+       queryset = super().get_queryset()
+       if self.request.GET.get('name-product'):
+           queryset = queryset.filter(nombre__icontains=self.request.GET.get('name-product'))
+       elif self.request.GET.get('brand'):
+           marca = self.request.GET.get('brand')
+           id_marca = Marca.objects.filter(nombre=marca).values()[0]['id']
+           print(id_marca)
+           queryset = queryset.filter(marca=id_marca)
+       elif self.request.GET.get('vip'):
+           queryset = queryset.filter(vip=True)
+       elif self.request.GET.get('price'):
+           queryset = queryset.filter(precio=self.request.GET.get('price'))
+       return queryset
+
+
+           
