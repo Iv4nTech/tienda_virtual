@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.forms import UserCreationForm
 
 def user_admin_or_staff(user):
@@ -81,7 +81,7 @@ class ver_productos_tienda(ListView):
            queryset = queryset.filter(precio=self.request.GET.get('price'))
        return queryset
     
-    
+@login_required
 def checkout(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == 'POST':
