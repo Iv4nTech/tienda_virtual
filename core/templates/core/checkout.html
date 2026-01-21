@@ -1,19 +1,38 @@
 {% extends 'core/base.html' %}
 
-{% block tittle_bar %}Checkout de {{producto.nombre}}{% endblock %}
-
-{% block tittle_section %}Checkout de {{producto.nombre}}{% endblock %}
-
 {% block content %}
-<p>Nombre del producto: {{producto.nombre}}</p>
-<p>Modelo: {{producto.modelo}}</p>
-<p>Unidades: {{producto.unidades}}</p>
-<p>Precio: {{producto.precio}}</p>
-<p>VIP: {{producto.vip}}</p>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Resumen de Compra</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush mb-4">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Producto:</strong> {{producto.nombre}}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Modelo:</strong> {{producto.modelo}}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Unidades:</strong> {{producto.unidades}}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>Precio:</strong> <span class="text-success fw-bold">${{producto.precio}}</span>
+                        </li>
+                    </ul>
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{form.as_div}}
-    <button type="submit">Comprar ahora</button>
-</form>
+                    <form action="" method="post" class="p-3 border rounded bg-light">
+                        {% csrf_token %}
+                        <h5 class="mb-3">Datos de pago</h5>
+                        {{form.as_div}}
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">Comprar ahora</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

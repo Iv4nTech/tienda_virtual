@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cerrar sesión</title>
-</head>
-<body>
-    <h1>Sesión cerrada</h1>
-    <p>Has cerrado sesión correctamente. <a href="{% url 'login' %}">Iniciar sesión de nuevo</a>.</p>
-</body>
-</html>
+{% extends 'core/base.html' %}
+{% block content %}
+    <div class="container auth-container text-center">
+        <div class="card auth-card shadow-sm border-0">
+            <div class="card-body">
+                <div class="mb-3">
+                    <span class="display-1 text-muted">👋</span>
+                </div>
+                <h1 class="h3 mb-3">Sesión cerrada</h1>
+                <p class="text-muted">Has salido del sistema correctamente.</p>
+                <hr>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Volver a entrar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -42,7 +42,8 @@
                             <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
                         </form>
                     {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Iniciar sesión</a>
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-sm me-3">Iniciar sesión</a>
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Registrarse</a>
                     {% endif %}
                 </div>
             </div>

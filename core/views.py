@@ -64,6 +64,10 @@ class ver_productos_tienda(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['brands'] = Marca.objects.all()
+        try:
+            context['price'] = int(self.request.GET.get('price'))
+        except TypeError:
+             context['price'] = self.request.GET.get('price')
         return context
     
     def get_queryset(self):
@@ -78,7 +82,7 @@ class ver_productos_tienda(ListView):
        elif self.request.GET.get('vip'):
            queryset = queryset.filter(vip=True)
        elif self.request.GET.get('price'):
-           queryset = queryset.filter(precio=self.request.GET.get('price'))
+           queryset = queryset.filter(precio__lt = self.request.GET.get('price'))
        return queryset
     
 @login_required
