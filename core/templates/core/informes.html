@@ -14,7 +14,7 @@
 
 <form action="" method="get">
     <select name="marcas" id="marcas">
-        <option value="">Seleciona una marca</option> 
+        <option value="Ninguna">Seleciona una marca</option> 
        {% for marca in marcas %}
         <option value="{{marca.nombre}}">{{marca.nombre}}</option>
        {% endfor %}

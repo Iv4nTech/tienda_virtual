@@ -11,6 +11,16 @@
             <li><a href="{% url 'ver_producto' %}">Inicio</a></li>
             <li><a href="{% url 'ver_producto_tienda' %}">Tienda usuario</a></li>
         </ul>
+        {% if user.is_authenticated %}
+        <p>Bienvenido {{user.username}}!</p>
+          <form action="{% url 'logout' %}" method="post">
+  {% csrf_token %} 
+  <button type="submit" class="">Cerrar Sesión</button>
+</form>
+        {% else %}
+        <a href="{% url 'login' %}">Iniciar sesion</a>
+        {% endif %}
+      
     </nav>
     <h1>{% block tittle_section %}{% endblock %}</h1>
     {% block content %}{% endblock %}

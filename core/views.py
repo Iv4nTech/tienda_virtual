@@ -5,6 +5,8 @@ from .forms import ProductoForm, CompraForm
 from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponse
+from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.decorators import user_passes_test
 
 class ver_productos(ListView):
     template_name = 'core/ver_productos.html'
@@ -59,6 +61,7 @@ class ver_productos_tienda(ListView):
            queryset = queryset.filter(precio=self.request.GET.get('price'))
        return queryset
     
+    
 def checkout(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == 'POST':
@@ -76,13 +79,15 @@ def checkout(request, pk):
     form = CompraForm()
     return render(request, 'core/checkout.html', {'form':form, 'producto':producto})
 
+def user_admin_or_staff(user):
+    return user.is_superuser or user.is_staff
+
+@user_passes_test(user_admin_or_staff)
 def informes(request):
     marca_request = request.GET.get('marcas')
     productos = Producto.objects.annotate(Sum('compras__unidades')).order_by('-compras__unidades__sum')
-    marca_filtrada = Marca.objects.get(nombre=marca_request)
-    print(marca_filtrada)
+    marca_filtrada = Marca.objects.filter(nombre=marca_request).first()
     marcas = Marca.objects.all()
     clientes_importe = UsuarioTienda.objects.annotate(importe_total_compras=Sum('compras__importe'))
     print(clientes_importe.values())
-
     return render(request, 'core/informes.html', {'productos':productos, 'marcas':marcas, 'marcafiltrada':marca_filtrada})
