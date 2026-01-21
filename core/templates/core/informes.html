@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Informe de la tienda{% endblock %}
+
+{% block tittle_section %}Informe de la tienda{% endblock %}
+
+{% block content %}
+
+{% for producto in productos %}
+    <div>
+         {{producto.nombre}} - {{producto.compras__unidades__sum}} unidades vendidas
+    </div>
+{% endfor %}
+
+<form action="" method="get">
+    <select name="marcas" id="marcas">
+        <option value="">Seleciona una marca</option> 
+       {% for marca in marcas %}
+        <option value="{{marca.nombre}}">{{marca.nombre}}</option>
+       {% endfor %}
+    </select>
+    <button type="submit">Filtrar</button>
+</form>
+
+    <div>
+         <h2>{{marcafiltrada}}</h2>
+         <ul>
+              {% for producto in marcafiltrada.productos.all %}
+           <li>{{producto.nombre}}</li>
+         {% endfor %}
+         </ul>
+    </div>
+
+
+
+
+{% endblock %}

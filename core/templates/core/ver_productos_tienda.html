@@ -32,7 +32,7 @@
 </form>
 <ul>
 {% for producto in productos %}
-    <li>{{producto.nombre}} - {{producto.modelo}}</li>
+    <li><a href="{% url 'checkout' producto.pk %}">{{producto.nombre}} - {{producto.modelo}}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

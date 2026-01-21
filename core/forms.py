@@ -8,3 +8,7 @@ class ProductoForm(ModelForm):
         model = Producto
         fields = ['nombre', 'modelo', 'unidades', 'precio', 'vip', 'marca']
 
+class CompraForm(ModelForm):
+    class Meta:
+        model = Compra
+        fields = ['unidades']

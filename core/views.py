@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import *
-from .forms import ProductoForm
+from .forms import ProductoForm, CompraForm
 from django.urls import reverse_lazy
+from django.db.models import Sum
+from django.http import HttpResponse
 
 class ver_productos(ListView):
     template_name = 'core/ver_productos.html'
@@ -56,6 +58,30 @@ class ver_productos_tienda(ListView):
        elif self.request.GET.get('price'):
            queryset = queryset.filter(precio=self.request.GET.get('price'))
        return queryset
+    
+def checkout(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    if request.method == 'POST':
+        form =  CompraForm(request.POST)
+        print(form)
+        if form.is_valid():
+            nueva_compra = form.save(commit=False)
+            nueva_compra.producto = producto
+            nueva_compra.save()
+            #Añadir usuario cuando tengamos los login para probarlo mejor
+            return redirect('ver_producto_tienda')
+        else:
+            print('formulario invalido')
+    form = CompraForm()
+    return render(request, 'core/checkout.html', {'form':form, 'producto':producto})
 
+def informes(request):
+    marca_request = request.GET.get('marcas')
+    productos = Producto.objects.annotate(Sum('compras__unidades')).order_by('-compras__unidades__sum')
+    marca_filtrada = Marca.objects.get(nombre=marca_request)
+    print(marca_filtrada)
+    marcas = Marca.objects.all()
+    clientes_importe = UsuarioTienda.objects.annotate(importe_total_compras=Sum('compras__importe'))
+    print(clientes_importe.values())
 
-           
+    return render(request, 'core/informes.html', {'productos':productos, 'marcas':marcas, 'marcafiltrada':marca_filtrada})
