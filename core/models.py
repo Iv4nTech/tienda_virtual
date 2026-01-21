@@ -27,10 +27,18 @@ class Producto(models.Model):
         return f'{self.id} | {self.nombre} ({self.modelo}) Stock: {self.unidades}'
     
 class Compra(models.Model):
+
+    class Iva(models.IntegerChoices):
+        GENERAL = 21
+        REDUCIDO = 10
+        SUPERREDUCIDO = 4
+        EXCENTO = 0
+
+
     fecha = models.DateField(auto_now_add=True)
     unidades = models.IntegerField()
     importe = models.DecimalField(decimal_places=2, max_digits=6, null=True, blank=True)
-    iva = models.IntegerField(null=True, blank = True)
+    iva = models.IntegerField(choices=Iva, null=True)
     usuario = models.ForeignKey(UsuarioTienda, on_delete=models.SET_NULL, null=True, blank=True, related_name='compras')
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True, related_name='compras')
 

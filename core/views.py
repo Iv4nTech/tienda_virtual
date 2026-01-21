@@ -67,6 +67,7 @@ def checkout(request, pk):
         if form.is_valid():
             nueva_compra = form.save(commit=False)
             nueva_compra.producto = producto
+            nueva_compra.importe = (producto.precio * form.cleaned_data['unidades'])
             nueva_compra.save()
             #Añadir usuario cuando tengamos los login para probarlo mejor
             return redirect('ver_producto_tienda')
