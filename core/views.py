@@ -103,6 +103,28 @@ def checkout(request, pk):
         form = CompraForm()
     return render(request, 'core/checkout.html', {'form':form, 'producto':producto})
 
+class CheckoutCreateView(LoginRequiredMixin, CreateView):
+    model = Compra
+    form_class = CompraForm
+    template_name = 'core/checkout.html'
+    success_url = reverse_lazy('ver_producto_tienda')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['producto'] = get_object_or_404(Producto, pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        producto = get_object_or_404(Producto, pk=self.kwargs['pk'])
+        form.instance.usuario = self.request.user
+        form.instance.producto = producto
+        unidades = form.cleaned_data['unidades']
+        descuento = form.cleaned_data['promocion'].descuento
+        
+        form.instance.importe = (float(producto.precio * unidades) * 1.21) * (descuento / 100)
+        
+        return super().form_valid(form)
+
 @user_passes_test(user_admin_or_staff)
 def informes(request):
     marca_request = request.GET.get('marcas')

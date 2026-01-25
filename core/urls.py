@@ -9,7 +9,7 @@ urlpatterns = [
     path('tienda/admin/productos/eliminar/<int:pk>', eliminar_producto.as_view(), name='eliminar_producto'),
 
     path('tienda/compra/', ver_productos_tienda.as_view(), name='ver_producto_tienda'),
-    path('tienda/checkout/<int:pk>', checkout, name='checkout'),
+    path('tienda/checkout/<int:pk>', CheckoutCreateView.as_view(), name='checkout'),
     path('tienda/informes', informes, name='informes'),
 
     path('tienda/register', RegistroView.as_view(), name='register'),
