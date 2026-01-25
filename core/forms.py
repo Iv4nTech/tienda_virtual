@@ -3,6 +3,8 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django import forms
+from datetime import date
+from django.forms import ValidationError
 
 
 class ProductoForm(ModelForm):
@@ -30,13 +32,14 @@ class CompraForm(ModelForm):
         codigo = self.cleaned_data.get('promocion')
         if not codigo:
             return None
-        
+
         try:
-            return Promocion.objects.get(codigo=codigo)
+            promocion = Promocion.objects.get(codigo=codigo)
+            if promocion.fecha_fin < date.today():
+                raise forms.ValidationError('Este codigo caduco')
+            return promocion
         except Promocion.DoesNotExist:
             raise forms.ValidationError("Este código no existe.")
-
-   
 
 
 class ClienteCreationForm(UserCreationForm):
@@ -49,8 +52,12 @@ class PromocionesForm(ModelForm):
         model = Promocion
         fields = ['nombre', 'codigo', 'descuento', 'fecha_fin']
 
-    
-    widgets = {
-            "fecha_fin": forms.DateInput(attrs={'type':'date'}),
-            'descuento': forms.NumberInput(attrs={'type':'number','min':'0', 'max':'100', 'value':'0'})
-        }
+        widgets = {
+                "fecha_fin": forms.DateInput(attrs={'type':'date'}),
+                'descuento': forms.NumberInput(attrs={'type':'number','min':'0', 'max':'100', 'value':'0'})
+            }
+        
+    def clean(self):
+        if self.cleaned_data['fecha_fin'] < date.today():
+            raise ValidationError('La fecha de fin no puede ser anterior a la fecha actual')
+

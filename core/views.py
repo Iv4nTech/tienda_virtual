@@ -119,8 +119,8 @@ class CheckoutCreateView(LoginRequiredMixin, CreateView):
         form.instance.usuario = self.request.user
         form.instance.producto = producto
         unidades = form.cleaned_data['unidades']
-        descuento = form.cleaned_data['promocion'].descuento
-        
+        promocion = form.cleaned_data.get('promocion')
+        descuento = promocion.descuento
         form.instance.importe = (float(producto.precio * unidades) * 1.21) * (descuento / 100)
         
         return super().form_valid(form)
