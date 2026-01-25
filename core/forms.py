@@ -12,9 +12,32 @@ class ProductoForm(ModelForm):
         fields = ['nombre', 'modelo', 'unidades', 'precio', 'vip', 'marca']
 
 class CompraForm(ModelForm):
+
+    promocion = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Introduce código de descuento'})
+    )
     class Meta:
         model = Compra
-        fields = ['unidades']
+        fields = ['unidades', 'promocion']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.promocion:
+            self.fields['promocion'].initial = self.instance.promocion.codigo
+
+    def clean_promocion(self):
+        codigo = self.cleaned_data.get('promocion')
+        if not codigo:
+            return None
+        
+        try:
+            return Promocion.objects.get(codigo=codigo)
+        except Promocion.DoesNotExist:
+            raise forms.ValidationError("Este código no existe.")
+
+   
+
 
 class ClienteCreationForm(UserCreationForm):
     class Meta:
@@ -26,7 +49,8 @@ class PromocionesForm(ModelForm):
         model = Promocion
         fields = ['nombre', 'codigo', 'descuento', 'fecha_fin']
 
-        widgets = {
+    
+    widgets = {
             "fecha_fin": forms.DateInput(attrs={'type':'date'}),
             'descuento': forms.NumberInput(attrs={'type':'number','min':'0', 'max':'100', 'value':'0'})
         }

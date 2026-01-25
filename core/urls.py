@@ -20,5 +20,7 @@ urlpatterns = [
     path('tienda/admin/promociones/crear', CreatePromocion.as_view(), name='crear_promocion'),
     path('tienda/admin/promociones/<int:pk>', DetailPromocion.as_view(), name='detalle_promocion'),
     path('tienda/admin/promociones/editar/<int:pk>', UpdatePromocion.as_view(), name='editar_promocion'),
-    path('tienda/admin/promociones/eliminar/<int:pk>', DeletePromocion.as_view(), name='eliminar_promocion')
+    path('tienda/admin/promociones/eliminar/<int:pk>', DeletePromocion.as_view(), name='eliminar_promocion'),
+
+    path('tienda/admin/promociones/informes', ver_informe_promociones, name='informe_promociones')
 ]

@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.forms import ValidationError
+from django.db.models import Count, Avg
 
 def user_admin_or_staff(user):
     return user.is_superuser or user.is_staff
@@ -90,18 +92,15 @@ def checkout(request, pk):
     producto = get_object_or_404(Producto, pk=pk)
     if request.method == 'POST':
         form =  CompraForm(request.POST)
-        print(form)
         if form.is_valid():
             nueva_compra = form.save(commit=False)
             nueva_compra.producto = producto
-            nueva_compra.importe = float(producto.precio * form.cleaned_data['unidades']) * 1.21
+            nueva_compra.importe = (float(producto.precio * form.cleaned_data['unidades']) * 1.21) * (form.cleaned_data['promocion'].descuento/100)
             nueva_compra.usuario = request.user
             nueva_compra.save()
-            #Añadir usuario cuando tengamos los login para probarlo mejor
             return redirect('ver_producto_tienda')
-        else:
-            print('formulario invalido')
-    form = CompraForm()
+    else:
+        form = CompraForm()
     return render(request, 'core/checkout.html', {'form':form, 'producto':producto})
 
 @user_passes_test(user_admin_or_staff)
@@ -156,3 +155,9 @@ class UpdatePromocion(UpdateView):
     template_name = 'core/crear_promocion.html'
     success_url = reverse_lazy('ver_promociones')
     form_class = PromocionesForm
+
+def ver_informe_promociones(request):
+    query = Promocion.objects.annotate(Count('compras'))
+    total_promos = Promocion.objects.aggregate(Count('compras'))
+    media_compras_promo = Promocion.objects.aggregate(Avg('compras__promocion__descuento'))
+    return render(request, 'core/informe_promociones.html', {'promociones':query, 'total':total_promos, 'descuento_medio':media_compras_promo})

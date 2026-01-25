@@ -1,0 +1,67 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Informe de Promociones | Admin{% endblock %}
+
+{% block tittle_section %}Informe de Promociones{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3">
+                <h5 class="card-title mb-0 fw-bold text-primary">Uso de Códigos de Promoción</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-4">Código de Promoción</th>
+                            <th scope="col" class="text-end pe-4">Cantidad de Compras</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for promocion in promociones %}
+                        <tr>
+                            <td class="ps-4">
+                                <code class="fw-bold text-dark bg-light px-2 py-1 rounded">{{promocion.codigo}}</code>
+                            </td>
+                            <td class="text-end pe-4">
+                                <span class="badge rounded-pill bg-info text-dark">
+                                    {{promocion.compras__count}} compras
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 mb-4 bg-dark text-white">
+            <div class="card-body p-4 text-center">
+                <h6 class="text-uppercase opacity-75 small fw-bold mb-2">Total Compras Promocionadas</h6>
+                <h2 class="display-5 fw-bold mb-0">{{total.compras__count}}</h2>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 border-top border-warning border-4">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="fs-4 me-2">📊</span>
+                    <h5 class="fw-bold mb-0">Descuento Medio</h5>
+                </div>
+                <div class="bg-light p-3 rounded text-center">
+                    <h3 class="text-dark fw-bold mb-0">
+                        {{descuento_medio.compras__promocion__descuento__avg|floatformat:2}}%
+                    </h3>
+                    <small class="text-muted">Promedio aplicado en compras</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
