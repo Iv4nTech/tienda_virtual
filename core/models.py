@@ -41,13 +41,14 @@ class Compra(models.Model):
     iva = models.IntegerField(choices=Iva, null=True)
     usuario = models.ForeignKey(UsuarioTienda, on_delete=models.SET_NULL, null=True, blank=True, related_name='compras')
     producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True, blank=True, related_name='compras')
+    promocion = models.ForeignKey('Promocion',on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f'{self.id} | {self.usuario} - {self.producto} UD: {self.unidades} [{self.fecha}]'
     
 class Promocion(models.Model):
     nombre = models.CharField(max_length=50)
-    codigo = models.CharField(max_length=20)
+    codigo = models.CharField(max_length=20, unique=True)
     descuento = models.IntegerField()
-    fecha_inicio = models.DateField()
+    fecha_inicio = models.DateField(auto_now_add=True)
     fecha_fin = models.DateField()

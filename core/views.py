@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import *
-from .forms import ProductoForm, CompraForm, ClienteCreationForm
+from .forms import ProductoForm, CompraForm, ClienteCreationForm, PromocionesForm
 from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponse
@@ -130,3 +130,29 @@ class detailCompra(DetailView):
     model = Compra
     template_name = 'core/detalle_compra.html'
     context_object_name = 'compra'
+
+class ViewPromociones(ListView):
+    model = Promocion
+    context_object_name = 'promociones'
+    template_name = 'core/ver_promociones.html'
+
+class CreatePromocion(CreateView):
+    model = Promocion
+    form_class = PromocionesForm
+    success_url = reverse_lazy('ver_promociones')
+    template_name = 'core/crear_promocion.html'
+
+class DetailPromocion(DetailView):
+    model = Promocion
+    template_name = 'core/detalle_promocion.html'
+
+class DeletePromocion(DeleteView):
+    model = Promocion
+    template_name = 'core/eliminar_promocion.html'
+    success_url = reverse_lazy('ver_promociones')
+
+class UpdatePromocion(UpdateView):
+    model = Promocion
+    template_name = 'core/crear_promocion.html'
+    success_url = reverse_lazy('ver_promociones')
+    form_class = PromocionesForm

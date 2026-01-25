@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}{% if form.instance.pk %}Editar promocion{% else %}Crear promocion{% endif %} | Admin{% endblock %}
+
+{% block tittle_section %}{% if form.instance.pk %}Editar promocion{% else %}Crear promocion{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <form action="" method="POST" class="needs-validation">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.as_p }} </div>
+        <button type="submit" class="btn btn-success px-4">Guardar Promocion</button>
+    </form>
+</div>
+{% endblock %}

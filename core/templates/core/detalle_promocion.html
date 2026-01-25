@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block tittle_bar %}Detalle de la promocion {{promocion.nombre}}({{promocion.id}}) | Admin{% endblock %}
+
+{% block tittle_section %}Detalle de la promocion {{promocion.nombre}}({{promocion.id}}){% endblock %}
+
+{% block content %}
+<p>Nombre de la promocion: {{promocion.nombre}}</p>
+<p>Codigo: {{promocion.codigo}}</p>
+<p>Fecha de inicio: {{promocion.fecha_inicio}}</p>
+<p>Fecha de fin: {{promocion.fecha_fin}}</p>
+{% endblock %}
