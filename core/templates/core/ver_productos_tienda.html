@@ -26,11 +26,11 @@
             <div class="col-md-3">
                 <label for="price" class="form-label fw-bold">Precio Máximo</label>
                 {% if price > 0%} 
-                <input type="range" class="form-range" value="{{price}}" min="0" max="9999" step="100" name="price" id="price" oninput="this.nextElementSibling.value = this.value + '€'">
+                <input type="range" class="form-range" value="{{price}}" min="0" max="500" step="25" name="price" id="price" oninput="this.nextElementSibling.value = this.value + '€'">
                 <output class="badge bg-secondary">{{price}}€</output>
                 {% else %}
-                 <input type="range" class="form-range" value="150" min="0" max="9999" step="100" name="price" id="price" oninput="this.nextElementSibling.value = this.value + '€'">
-                 <output class="badge bg-secondary">150€</output>
+                 <input type="range" class="form-range" value="25" min="0" max="500" step="25" name="price" id="price" oninput="this.nextElementSibling.value = this.value + '€'">
+                 <output class="badge bg-secondary">25€</output>
                 {% endif %}
             </div>
 

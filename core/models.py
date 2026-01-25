@@ -44,3 +44,10 @@ class Compra(models.Model):
 
     def __str__(self):
         return f'{self.id} | {self.usuario} - {self.producto} UD: {self.unidades} [{self.fecha}]'
+    
+class Promocion(models.Model):
+    nombre = models.CharField(max_length=50)
+    codigo = models.CharField(max_length=20)
+    descuento = models.IntegerField()
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
